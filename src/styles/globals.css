@@ -1,0 +1,73 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  --color-font: theme('colors.slate.800');
+  --color-page: theme('colors.slate.100');
+  --color-page-bright: #fff;
+  --color-action: theme('colors.blue.600');
+  --color-border: theme('colors.slate.400');
+}
+
+.theme-black {
+  --color-font: theme('colors.slate.100');
+  --color-page: theme('colors.slate.800');
+  --color-page-bright: #000;
+  --color-page-bright: theme('colors.slate.400');
+  @apply bg-page text-font;
+}
+
+@media (prefers-color-scheme: dark) {
+  :root {
+    --color-font: theme('colors.slate.100');
+    --color-page: theme('colors.slate.800');
+    --color-page-bright: #000;
+    --color-page-bright: theme('colors.slate.400');
+  }
+  .theme-black {
+    --color-font: #fff;
+    --color-page: theme('colors.slate.900');
+    --color-page-bright: theme('colors.slate.500');
+  }
+}
+
+*,
+*:before,
+*:after {
+  border-color: theme('colors.border');
+}
+
+html {
+  min-height: 100%;
+  @apply flex flex-col;
+}
+@screen bg {
+  html {
+    font-size: 17px;
+  }
+}
+@screen lg {
+  html {
+    font-size: 18px;
+  }
+}
+@screen lx {
+  html {
+    font-size: 19px;
+  }
+}
+@screen xl {
+  html {
+    font-size: 20px;
+  }
+}
+
+body {
+  @apply bg-page text-font;
+  @apply flex flex-col flex-1;
+}
+
+.cib-section {
+  @apply px-4 max-w-4xl;
+}
