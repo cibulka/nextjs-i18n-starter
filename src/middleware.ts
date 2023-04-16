@@ -1,31 +1,35 @@
+import Negotiator from 'negotiator';
 import { NextRequest, NextResponse } from 'next/server';
-import acceptLanguage from 'accept-language';
 
-import { FILE_EXTENSIONS } from '@/constants';
-import { LOCALE_DEFAULT, LOCALES } from '@/constants/i18n';
+import { LOCALES, LOCALE_DEFAULT } from '@/constants/i18n';
 
-acceptLanguage.languages([...LOCALES]);
+function getBestLocale(request: NextRequest) {
+  let locale: string | undefined;
+  try {
+    /* @ts-expect-error weird headers */
+    locale = new Negotiator({ headers: request.headers }).language(LOCALES);
+  } catch (err) {
+    console.error(err);
+    locale = undefined;
+  }
+  return locale || LOCALE_DEFAULT;
+}
+
+export function middleware(request: NextRequest) {
+  const pathname = request.nextUrl.pathname;
+
+  const isFile = !pathname.split('.').pop()?.startsWith('/');
+  if (isFile) return NextResponse.next();
+
+  const pathnameIsMissingLocale = LOCALES.every(
+    (locale) => !pathname.startsWith(`/${locale}/`) && pathname !== `/${locale}`,
+  );
+  if (!pathnameIsMissingLocale) return NextResponse.next();
+
+  const locale = getBestLocale(request);
+  return NextResponse.redirect(new URL(`/${locale}/${pathname}`, request.url));
+}
 
 export const config = {
-  // matcher: '/:lng*'
   matcher: ['/((?!api|_next/static|_next/image|assets|favicon.ico|sw.js).*)'],
 };
-
-export function middleware(req: NextRequest) {
-  const ext = req.url.split('.').pop();
-  if (ext && FILE_EXTENSIONS.includes(ext)) return NextResponse.next();
-
-  let lng = acceptLanguage.get(req.headers.get('Accept-Language'));
-  if (!lng) lng = LOCALE_DEFAULT;
-
-  // Redirect if lng in path is not supported
-  if (
-    !LOCALES.some((loc) => req.nextUrl.pathname.startsWith(`/${loc}`)) &&
-    !req.nextUrl.pathname.startsWith(`/cover`) &&
-    !req.nextUrl.pathname.startsWith('/_next')
-  ) {
-    return NextResponse.redirect(new URL(`/${lng}${req.nextUrl.pathname}`, req.url));
-  }
-
-  return NextResponse.next();
-}
