@@ -5,6 +5,7 @@ import { Inter } from 'next/font/google';
 import { LOCALES } from '@/constants/i18n';
 import { Locale } from '@/types/i18n';
 
+import '@/styles/debug.css';
 import '@/styles/globals.css';
 
 import { Nav } from './nav';

@@ -1,5 +1,8 @@
 {
     "app": {
         "title": "Next.js i18n Anlasser"
+    },
+    "empty": {
+        "option": "Nicht ausgewählt"
     }
 }

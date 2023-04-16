@@ -1,0 +1,14 @@
+.red,
+.undefined,
+.null,
+.false {
+  background: red !important;
+}
+
+.green {
+  background: green !important;
+}
+
+.blue {
+  background: blue !important;
+}

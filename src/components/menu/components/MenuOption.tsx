@@ -5,12 +5,13 @@ type MenuOptionLinkProps = {
   className: string;
   href: string;
   label: string | JSX.Element;
+  onClick: () => void;
 };
 
 export const MenuOptionLink = forwardRef<HTMLAnchorElement, MenuOptionLinkProps>(
   function MenuOptionLinkWithRef(props, ref) {
     return (
-      <Link href={props.href} className={props.className} ref={ref}>
+      <Link href={props.href} className={props.className} onClick={props.onClick} ref={ref}>
         {props.label}
       </Link>
     );

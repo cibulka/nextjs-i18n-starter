@@ -6,10 +6,11 @@ import { Float } from '@headlessui-float/react';
 import { IconCaretDown } from '@/icons';
 
 import { MenuOptionButton, MenuOptionLink } from './components/MenuOption';
+import { useTranslationClient } from '@/hooks/client/useTranslationClient';
 
 export type MenuOption<T extends string | number> = {
   href?: string;
-  isSelected?: boolean;
+  isSelected: boolean;
   label: string | JSX.Element;
   onClick?: () => void;
   value: T;
@@ -27,17 +28,16 @@ export function Menu<T extends string | number = string>(props: {
     menuItemSelected?: string;
   };
   icon?: JSX.Element;
-  initialValue?: number;
   options: MenuOption<T>[];
   placement?: 'top-start' | 'top-end' | 'bottom-end' | 'bottom-start';
   menuWidth: string;
 }) {
-  const initialIndex = props.initialValue
-    ? props.options.findIndex((v) => v.value === props.initialValue)
-    : 0;
-  const [index, setIndex] = useState(initialIndex);
+  const initialIndex = props.options.findIndex((opt) => opt.isSelected);
+  const [index, setIndex] = useState(initialIndex || 0);
+
   const option = props.options[index];
   const placement = props.placement || 'bottom-start';
+  const { t } = useTranslationClient('common');
 
   return (
     <MenuHeadless>
@@ -48,6 +48,7 @@ export function Menu<T extends string | number = string>(props: {
               'flex items-center gap-2',
               'cursor-pointer gap-2',
               'py-1 px-4',
+              props.icon && 'h-6',
               props.className,
               !open && props.classNames?.buttonClosed,
               open && (props.classNames?.buttonOpen || 'bg-page-bright'),
@@ -56,7 +57,7 @@ export function Menu<T extends string | number = string>(props: {
               .join(' ')}
           >
             {props.icon && !open && <span className="mdMax:hidden w-6 h-6'">{props.icon}</span>}
-            {option.label}
+            {option?.label || t('empty.option')}
             <span
               className={[
                 'w-3 h-3',
@@ -87,7 +88,12 @@ export function Menu<T extends string | number = string>(props: {
                     .filter(Boolean)
                     .join(' ');
                   return option.href ? (
-                    <MenuOptionLink className={className} href={option.href} label={option.label} />
+                    <MenuOptionLink
+                      className={className}
+                      href={option.href}
+                      label={option.label}
+                      onClick={() => setIndex(i)}
+                    />
                   ) : (
                     <MenuOptionButton
                       className={className}
