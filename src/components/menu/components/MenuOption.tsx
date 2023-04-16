@@ -1,25 +1,34 @@
+import { forwardRef } from 'react';
 import Link from 'next/link';
 
-export function MenuOptionLink(props: {
+type MenuOptionLinkProps = {
   className: string;
   href: string;
   label: string | JSX.Element;
-}) {
-  return (
-    <Link href={props.href} className={props.className}>
-      {props.label}
-    </Link>
-  );
-}
+};
 
-export function MenuOptionButton(props: {
+export const MenuOptionLink = forwardRef<HTMLAnchorElement, MenuOptionLinkProps>(
+  function MenuOptionLinkWithRef(props, ref) {
+    return (
+      <Link href={props.href} className={props.className} ref={ref}>
+        {props.label}
+      </Link>
+    );
+  },
+);
+
+type MenuOptionButtonProps = {
   className: string;
   label: string | JSX.Element;
   onClick: () => void;
-}) {
-  return (
-    <button type="button" onClick={() => props.onClick()}>
-      {props.label}
-    </button>
-  );
-}
+};
+
+export const MenuOptionButton = forwardRef<HTMLButtonElement, MenuOptionButtonProps>(
+  function MenuOptionButtonWithRef(props, ref) {
+    return (
+      <button type="button" onClick={() => props.onClick()} ref={ref}>
+        {props.label}
+      </button>
+    );
+  },
+);

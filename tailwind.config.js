@@ -1,9 +1,10 @@
 /** @type {import('tailwindcss').Config} */
 module.exports = {
   content: [
-    './src/pages/**/*.{js,ts,jsx,tsx}',
-    './src/components/**/*.{js,ts,jsx,tsx}',
     './src/app/**/*.{js,ts,jsx,tsx}',
+    './src/blocks/**/*.{js,ts,jsx,tsx}',
+    './src/components/**/*.{js,ts,jsx,tsx}',
+    './src/pages/**/*.{js,ts,jsx,tsx}',
   ],
   theme: {
     screens: {
@@ -26,6 +27,7 @@ module.exports = {
     },
     extend: {
       colors: {
+        "action": "var(--color-action)",
         "border": "var(--color-border)",
         "font": "var(--color-font)",
         "page": "var(--color-page)",

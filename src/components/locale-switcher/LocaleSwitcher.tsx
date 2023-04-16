@@ -7,13 +7,26 @@ import { getLocalizedUrl } from '@/components/link-localized/LinkLocalized.utils
 import { LOCALES } from '@/constants/i18n';
 import { useLocale } from '@/hooks/client/useLocale';
 import { IconGlobe } from '@/icons';
+import { Locale } from '@/types/i18n';
 
-import { useGetLabel } from './LocaleSwitcher.utils';
+// the most efficient solution is to hardcode the labels here
+function getLabel(locale: Locale) {
+  switch (locale) {
+    case 'cs':
+      return 'Česky';
+    case 'es':
+      return 'Español';
+    case 'de':
+      return 'Deutsch';
+    case 'en':
+    default:
+      return 'English';
+  }
+}
 
 export function LocaleSwitcher() {
   const locale = useLocale();
   const pathname = usePathname();
-  const getLabel = useGetLabel();
 
   const otherLocales = LOCALES.filter((l) => l !== locale);
 
@@ -36,10 +49,16 @@ export function LocaleSwitcher() {
 
   return (
     <Menu
-      classNameMenu="theme-black"
+      className="theme-black text-sm"
+      classNames={{
+        menu: 'bg-page-bright',
+        menuItem: 'px-4 py-2',
+      }}
       icon={<IconGlobe />}
+      menuWidth="15em"
       options={LOCALES.map((l) => ({
         href: getLocalizedUrl(pathname, l),
+        isSelected: l === locale,
         value: l,
         label: getLabel(l),
       }))}

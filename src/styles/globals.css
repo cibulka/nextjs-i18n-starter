@@ -14,7 +14,7 @@
   --color-font: theme('colors.slate.100');
   --color-page: theme('colors.slate.800');
   --color-page-bright: #000;
-  --color-page-bright: theme('colors.slate.400');
+  --color-page-bright: theme('colors.slate.700');
   @apply bg-page text-font;
 }
 
@@ -70,4 +70,8 @@ body {
 
 .cib-section {
   @apply px-4 max-w-4xl;
+}
+
+path {
+  @apply fill-current;
 }

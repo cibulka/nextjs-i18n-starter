@@ -64,9 +64,9 @@ export function Contact(props: {
         onClick={() => onCopy(value)}
       >
         {state === STATE.FAILURE ? (
-          <IconExclamation className="fill-error" />
+          <IconExclamation />
         ) : state === STATE.SUCCESS ? (
-          <IconCheck className="fill-success" />
+          <IconCheck />
         ) : (
           <IconCopy />
         )}
