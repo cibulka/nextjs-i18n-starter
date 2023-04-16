@@ -1,11 +1,8 @@
 'use client';
-import React, { useEffect, useState } from 'react';
-import { useCopyToClipboard } from 'react-use';
 
 import { EMAIL, STATE } from '@/constants';
-import { useTimeoutCancelable } from '@/hooks/client/useTimeoutCancelable';
+import { useCopyToClipboard } from '@/hooks/client/useCopyToClipboard';
 import { IconExclamation, IconCheck, IconCopy } from '@/icons';
-import { State } from '@/types';
 
 export function Contact(props: {
   className?: string;
@@ -21,14 +18,7 @@ export function Contact(props: {
   mailto?: string;
   web?: string;
 }) {
-  const [state, setState] = useState<State>(STATE.IDLE);
-  const [copyState, copyToClipboard] = useCopyToClipboard();
-
-  useEffect(() => {
-    if (copyState.error) setState(STATE.FAILURE);
-    if (copyState.value) setState(STATE.SUCCESS);
-  }, [copyState]);
-  useTimeoutCancelable(() => setState(STATE.IDLE), state !== STATE.IDLE ? 1000 : null);
+  const { onCopy, state } = useCopyToClipboard();
 
   let protocol;
   let value: string;
@@ -71,7 +61,7 @@ export function Contact(props: {
           .filter(Boolean)
           .join(' ')}
         type="button"
-        onClick={() => copyToClipboard(value)}
+        onClick={() => onCopy(value)}
       >
         {state === STATE.FAILURE ? (
           <IconExclamation className="fill-error" />
